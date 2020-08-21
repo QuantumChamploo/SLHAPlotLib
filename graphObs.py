@@ -40,6 +40,10 @@ cat_dict = {"higgs":higgs_anno,"slepton":slepton_anno,"squark":squark_anno,"gaug
 
 # mask these groups by an excludes list to have the function to get 
 # rid of particles by the users control in a simple way
+
+"""
+This function splits a sparticle type into clusters, so that annotation can be done in the more presentable way. Using the defined "cluster threshold", all the particles are split annotation groups. The variables are kinda poorly named...
+"""
 def clusterFunc3(group):
 	hld = []
 	hs = []
@@ -101,7 +105,9 @@ def fitcluster(clusters):
 
 	return parts, anno 
 
-
+"""
+main object of the library.
+"""
 
 class Graph:
 	def __init__(self, file,excluded=[],keepNegs=False):
@@ -121,11 +127,11 @@ class Graph:
 		self.gauginos.sort(key=lambda x: x.mass)
 		self.higgs.sort(key=lambda x: x.mass)
 		self.ticklabels = []
-
+# make the associated matricies 
 		self.makeMatrix()
 
 	def tossNegs(self):
-		print("in tossNegs")
+		
 		for i in self.higgs:
 			if (i.mass < 0):
 				self.higgs.remove(i)
@@ -202,6 +208,8 @@ class Graph:
 			part.x = part.x + part.delta
 		for part in self.gauginos:
 			part.x = part.x + part.delta
+        
+
 	def plot(self,includes=['sleptons','higgs','gauginos','squarks']):
 
 		annotations, annotated_particles = self.orgCats(includes)
@@ -280,8 +288,7 @@ class Graph:
 		ys = y1 + y2 + y3 + y4
 
 		#xs = np.arange(len(ys))
-		clist = [(0, "red"), (0.125, "red"), (0.25, "orange"), (0.5, "green"), 
-         (0.7, "fuchsia"), (0.75, "darkorchid"), (1, "blue")]
+		clist = [(0, "red"), (0.125, "red"), (0.25, "orange"), (0.5, "green"), (0.7, "fuchsia"), (0.75, "darkorchid"), (1, "blue")]
 
 		clist2 =[(0,"chartreuse"),(.33,"aqua"),(.66,"magenta"),(1,"mediumpurple")]
 		rvb = mcolors.LinearSegmentedColormap.from_list("", clist2)
@@ -297,7 +304,7 @@ class Graph:
 
 
 	def plotSimple(self,includes=['sleptons','higgs','gauginos','squarks']):
-		annotations, annotated_particles = self.orgCats()
+		annotations, annotated_particles = self.orgCats(includes)
 		x1 = [i.x for i in self.higgs]
 		y1 = [i.mass for i in self.higgs]
 
@@ -393,6 +400,10 @@ class Graph:
 		except:
 			a = 8	
 
+"""
+Particle class, used for convienent organization
+"""
+            
 class Particle:
 	def __init__(self,pdg,mass):
 		self.pdg = pdg
